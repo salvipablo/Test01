@@ -8,6 +8,9 @@ TagManager:
   - Feet
   - BodyPlayerFront
   - BodyPlayerBack
+  - BodyPlayerRight
+  - BodyPlayerLeft
+  - Wood
   layers:
   - Default
   - TransparentFX

@@ -1,2 +1,3 @@
 **** Tickets ****
-T#00001 - Scene and basic movements
+T#00001 - Scene and basic movements.
+T#00002 - Basic movements and camera.
