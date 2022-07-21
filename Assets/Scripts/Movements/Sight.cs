@@ -5,18 +5,27 @@ using UnityEngine;
 public class Sight : MonoBehaviour
 {
     private LifeObject lifeObject;
+    private Item item;
 
     void Update()
     {
-        if (Input.GetButton("Fire1"))
+        if (Input.GetButton("Fire2"))
         {
             if (lifeObject != null) lifeObject.life -= 1;
+        }
+
+        if (Input.GetButtonDown("Inventario"))
+        {
+            foreach (Item item in PlayerManager.inventory)
+            {
+                Debug.Log(item.name + " - Cantidad: " + item.quantity);
+            }
         }
     }
 
     private void OnTriggerEnter(Collider collidedObject)
     {
-        Debug.Log("Hubo colision contra: " + collidedObject.gameObject.tag);
         lifeObject = collidedObject.GetComponent<LifeObject>();
+        item = collidedObject.GetComponent<Item>();
     }
 }

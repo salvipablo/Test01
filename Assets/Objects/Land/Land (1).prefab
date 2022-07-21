@@ -13,6 +13,7 @@ GameObject:
   - component: {fileID: 2859386260932934519}
   - component: {fileID: 4194877324855498188}
   - component: {fileID: 5441159568456694344}
+  - component: {fileID: 1265919870237358956}
   m_Layer: 0
   m_Name: Land (1)
   m_TagString: Land
@@ -111,3 +112,18 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   life: 30
+--- !u!114 &1265919870237358956
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 7416283849886960299}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 61e0e932a294adc4987322a9bc276d43, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  id: 1
+  name: Common Land
+  type: Land_Common

@@ -13,6 +13,7 @@ GameObject:
   - component: {fileID: 6491586690667294059}
   - component: {fileID: 1314414724698783307}
   - component: {fileID: 1023019673517101473}
+  - component: {fileID: 8932886064296068559}
   m_Layer: 0
   m_Name: Wood (1)
   m_TagString: Wood
@@ -111,3 +112,18 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   life: 100
+--- !u!114 &8932886064296068559
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 7103960770064622639}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 61e0e932a294adc4987322a9bc276d43, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  id: 2
+  name: 'Common Wood '
+  type: Wood_common

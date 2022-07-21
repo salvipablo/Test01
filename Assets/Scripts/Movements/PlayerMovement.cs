@@ -45,12 +45,12 @@ public class PlayerMovement : MonoBehaviour
 
     private void movements(float horizontalTwistMouse, float verticalTwistMouse)
     {
-        if (Input.GetButtonDown("Run")) 
-        { 
-            if (movSpeed == 5 )
+        if (Input.GetButtonDown("Run"))
+        {
+            if (movSpeed == 5)
             {
                 movSpeed *= 2;
-            } 
+            }
             else
             {
                 movSpeed /= 2;
@@ -63,14 +63,14 @@ public class PlayerMovement : MonoBehaviour
         if (ItCanMoveLeft) if (Input.GetButton("WalkLeft")) transform.Translate(-movSpeed * Time.deltaTime, 0, 0);
 
         if (horizontalTwistMouse != 0) transform.Rotate(Vector3.up * horizontalTwistMouse * turnSensitivity.x);
-        if (verticalTwistMouse != 0) 
+        if (verticalTwistMouse != 0)
         {
             float angle = (camera.localEulerAngles.x - verticalTwistMouse * turnSensitivity.y + 360) % 360;
             if (angle > 180) angle -= 360;
             angle = Mathf.Clamp(angle, -80, 80);
             camera.localEulerAngles = Vector3.right * angle;
         }
-        
+
         if (Input.GetButton("Jump") && itCanJump == true)
         {
             itCanJump = false;
