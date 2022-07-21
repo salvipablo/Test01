@@ -45,6 +45,18 @@ public class PlayerMovement : MonoBehaviour
 
     private void movements(float horizontalTwistMouse, float verticalTwistMouse)
     {
+        if (Input.GetButtonDown("Run")) 
+        { 
+            if (movSpeed == 5 )
+            {
+                movSpeed *= 2;
+            } 
+            else
+            {
+                movSpeed /= 2;
+            }
+        }
+
         if (ItCanMoveForward) if (Input.GetButton("WalkForward")) transform.Translate(0, 0, movSpeed * Time.deltaTime);
         if (ItCanMoveBackwards) if (Input.GetButton("WalkBackwards")) transform.Translate(0, 0, -movSpeed * Time.deltaTime);
         if (ItCanMoveRight) if (Input.GetButton("WalkRight")) transform.Translate(movSpeed * Time.deltaTime, 0, 0);

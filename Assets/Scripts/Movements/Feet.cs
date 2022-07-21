@@ -6,9 +6,9 @@ public class Feet : MonoBehaviour
 {
     private PlayerMovement iCanjump;
 
-    private void OnTriggerEnter(Collider other)
+    private void OnTriggerEnter(Collider collidedObject)
     {
-        if (other.gameObject.tag.Equals("Player")) iCanjump = other.GetComponent<PlayerMovement>();
-        if (other.gameObject.tag.Equals("Land")) iCanjump.itCanJump = true;
+        if (collidedObject.gameObject.tag.Equals("Player")) iCanjump = collidedObject.GetComponent<PlayerMovement>();
+        if (collidedObject.gameObject.tag.Equals("Land")) iCanjump.itCanJump = true;
     }
 }
