@@ -33,7 +33,7 @@ public class PlayerMovement : MonoBehaviour
         ItCanMoveRight = true;
         ItCanMoveLeft = true;
 
-        Cursor.lockState = CursorLockMode.Locked;
+        //Cursor.lockState = CursorLockMode.Locked;
 
         camera = transform.Find("Camera");
     }
