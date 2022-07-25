@@ -125,5 +125,5 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   id: 2
-  name: 'Common Wood '
+  name: Common Wood
   type: Wood_common

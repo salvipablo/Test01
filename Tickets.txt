@@ -4,3 +4,4 @@ T#00002 - Basic movements and camera.
 T#00003 - basic resources without tools.
 T#00004 - Programming inventory.
 T#00005 - Basic graphic interface.
+T#00006 - Basic crafting.
