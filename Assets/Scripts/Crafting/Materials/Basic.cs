@@ -8,7 +8,6 @@ public class Basic : MonoBehaviour
     {
         bool itemExists = false;
 
-        // Tengo que tener 1 de Common Wood
         foreach (Item item in PlayerManager.inventory)
         {
             if (item.name.Equals("Common Wood") && item.quantity > 0)
@@ -24,7 +23,7 @@ public class Basic : MonoBehaviour
 
         if (itemExists)
         {
-            Item itemInsert = new Item(3, "Wood Plank", "Plank_Wood", 10);
+            Item itemInsert = new Item(3, "Wood Plank", "Plank_Wood", 10, 0);
 
             itemExists = false;
 
@@ -65,7 +64,7 @@ public class Basic : MonoBehaviour
 
         if (itemExists)
         {
-            Item itemInsert = new Item(3, "Wood Sticks", "Sticks_Wood", 3);
+            Item itemInsert = new Item(3, "Wood Sticks", "Sticks_Wood", 3, 0);
 
             itemExists = false;
 

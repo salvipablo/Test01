@@ -5,3 +5,4 @@ T#00003 - basic resources without tools.
 T#00004 - Programming inventory.
 T#00005 - Basic graphic interface.
 T#00006 - Basic crafting.
+T#00007 - Choose item to use.

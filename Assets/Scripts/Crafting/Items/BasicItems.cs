@@ -18,7 +18,7 @@ public class BasicItems : MonoBehaviour
 
         if (itemsExists)
         {
-            Item itemInsert = new Item(3, "Wooden Shovel", "Shovel_Wooden", 1);
+            Item itemInsert = new Item(3, "Wooden Shovel", "Shovel_Wooden", 1, 5);
 
             itemsExists = false;
 

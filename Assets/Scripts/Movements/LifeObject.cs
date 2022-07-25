@@ -30,7 +30,7 @@ public class LifeObject : MonoBehaviour
 
             if (!encontrado)
             {
-                Item newItemInv = new Item(this.infoItem.id, this.infoItem.name, this.infoItem.type, 1);
+                Item newItemInv = new Item(this.infoItem.id, this.infoItem.name, this.infoItem.type, 1, 0);
                 PlayerManager.inventory.Add(newItemInv);
             }
 
