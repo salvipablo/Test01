@@ -9,47 +9,22 @@ public class Sight : MonoBehaviour
 
     void Update()
     {
-        if (Input.GetButton("Fire2"))
-        {
-            if (lifeObject != null) lifeObject.life -= PlayerManager.shovelForce;
-        }
+        if (Input.GetButton("Fire2")) if (lifeObject != null) collectResource(lifeObject.gameObject.tag);
 
-        if (Input.GetButton("item_Inv1"))
-        {
-            PlayerManager.shovelForce += PlayerManager.inventory[0].shovelForce;
-        }
+        if (Input.GetButton("item_Inv1")) inventoryPositionChange(PlayerManager.inventory[0]);
+        if (Input.GetButton("item_Inv2")) inventoryPositionChange(PlayerManager.inventory[1]);
+        if (Input.GetButton("item_Inv3")) inventoryPositionChange(PlayerManager.inventory[2]);
+        if (Input.GetButton("item_Inv4")) inventoryPositionChange(PlayerManager.inventory[3]);
+        if (Input.GetButton("item_Inv5")) inventoryPositionChange(PlayerManager.inventory[4]);
+        if (Input.GetButton("item_Inv6")) inventoryPositionChange(PlayerManager.inventory[5]);
 
-        if (Input.GetButton("item_Inv2"))
-        {
-            PlayerManager.shovelForce += PlayerManager.inventory[1].shovelForce;
-        }
+        if (Input.GetButtonDown("Inventario")) showInventory();
 
-        if (Input.GetButton("item_Inv3"))
+        if (Input.GetButtonDown("Informacion"))
         {
-            PlayerManager.shovelForce += PlayerManager.inventory[2].shovelForce;
-        }
-
-        if (Input.GetButton("item_Inv4"))
-        {
-            PlayerManager.shovelForce += PlayerManager.inventory[3].shovelForce;
-        }
-
-        if (Input.GetButton("item_Inv5"))
-        {
-            PlayerManager.shovelForce += PlayerManager.inventory[4].shovelForce;
-        }
-
-        if (Input.GetButton("item_Inv6"))
-        {
-            PlayerManager.shovelForce += PlayerManager.inventory[5].shovelForce;
-        }
-
-        if (Input.GetButtonDown("Inventario"))
-        {
-            foreach (Item item in PlayerManager.inventory)
-            {
-                Debug.Log(item.name + " - Cantidad: " + item.quantity);
-            }
+            Debug.Log("Velocidad de Pala:" + PlayerManager.SpeedShovel);
+            Debug.Log("Velocidad de Hacha:" + PlayerManager.SpeedAxe);
+            Debug.Log("Velocidad de pico:" + PlayerManager.SpeedPeak);
         }
     }
 
@@ -57,5 +32,25 @@ public class Sight : MonoBehaviour
     {
         lifeObject = collidedObject.GetComponent<LifeObject>();
         item = collidedObject.GetComponent<Item>();
+    }
+
+    private void inventoryPositionChange(Item selectedItem)
+    {
+        PlayerManager.SettingCharacterStatesByDefault();
+        PlayerManager.SettingCharacterStatesPerItem(selectedItem);
+    }
+
+    private void collectResource(string resourceTag)
+    {
+        if (resourceTag.Equals("Land")) lifeObject.life -= PlayerManager.SpeedShovel;
+        if (resourceTag.Equals("Wood")) lifeObject.life -= PlayerManager.SpeedAxe;
+    }
+
+    private void showInventory()
+    {
+        foreach (Item item in PlayerManager.inventory)
+        {
+            Debug.Log(item.name + " - Cantidad: " + item.quantity);
+        }
     }
 }

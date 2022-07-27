@@ -18,7 +18,7 @@ public class BasicItems : MonoBehaviour
 
         if (itemsExists)
         {
-            Item itemInsert = new Item(3, "Wooden Shovel", "Shovel_Wooden", 1, 5);
+            Item itemInsert = new Item(5, "Wooden Shovel", "Shovel_Wooden", 1, 0, 0, 5, 0, 0);
 
             itemsExists = false;
 
@@ -39,9 +39,34 @@ public class BasicItems : MonoBehaviour
         }
     }
 
-    public void woodenAx()
+    public void woodenAx()  // Hacha de madera.
     {
-        Debug.Log("Hacha de madera");
+        string[] items = { "Wood Plank", "Wood Sticks" };
+        int[] quantityItems = { 3, 2 };
+
+        bool itemsExists = canICreateItem(items, quantityItems);
+
+        if (itemsExists)
+        {
+            Item itemInsert = new Item(6, "Wooden Ax", "Ax_Wooden", 1, 0, 0, 0, 5, 0);
+
+            itemsExists = false;
+
+            foreach (Item item in PlayerManager.inventory)
+            {
+                if (item.name.Equals("Wooden Ax"))
+                {
+                    item.quantity += itemInsert.quantity;
+                    itemsExists = true;
+                }
+            }
+
+            if (!itemsExists) PlayerManager.inventory.Add(itemInsert);
+        }
+        else
+        {
+            Debug.Log("No tiene los elementos para crear una pala de madera");
+        }
     }
 
     public void woodenPickaxe()
@@ -55,6 +80,8 @@ public class BasicItems : MonoBehaviour
 
         for (int i = 0; i < necessaryItems.Length; i++)
         {
+            resourceFound = false;
+
             foreach (Item itemInv in PlayerManager.inventory)
             {
                 if (itemInv.name.Equals(necessaryItems[i]) && itemInv.quantity > 0)

@@ -4,7 +4,7 @@ using UnityEngine;
 
 public class Basic : MonoBehaviour
 {
-    public void craftingWood()
+    public void craftingWoodPlank()
     {
         bool itemExists = false;
 
@@ -17,13 +17,11 @@ public class Basic : MonoBehaviour
                 if (item.quantity == 0) PlayerManager.inventory.Remove(item);
                 break;
             }
-
-            
         }
 
         if (itemExists)
         {
-            Item itemInsert = new Item(3, "Wood Plank", "Plank_Wood", 10, 0);
+            Item itemInsert = new Item(3, "Wood Plank", "Plank_Wood", 10, 0, 0, 0, 0, 0);
 
             itemExists = false;
 
@@ -64,7 +62,7 @@ public class Basic : MonoBehaviour
 
         if (itemExists)
         {
-            Item itemInsert = new Item(3, "Wood Sticks", "Sticks_Wood", 3, 0);
+            Item itemInsert = new Item(4, "Wood Sticks", "Sticks_Wood", 3, 0, 0, 0, 0, 0);
 
             itemExists = false;
 
