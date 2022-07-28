@@ -6,7 +6,7 @@ using UnityEngine;
 public class Sight : MonoBehaviour
 {
     private LifeObject lifeObject;
-    private Item item;
+    private InfoItem infoItem;
 
     void Update()
     {
@@ -32,7 +32,9 @@ public class Sight : MonoBehaviour
     private void OnTriggerEnter(Collider collidedObject)
     {
         lifeObject = collidedObject.GetComponent<LifeObject>();
-        item = collidedObject.GetComponent<Item>();
+        infoItem = collidedObject.GetComponent<InfoItem>();
+
+        Debug.Log(infoItem);
     }
 
     private void inventoryPositionChange(Item selectedItem)
@@ -44,19 +46,36 @@ public class Sight : MonoBehaviour
     private void collectResource(string resourceTag)
     {
         if (resourceTag.Equals("Land")) lifeObject.life -= PlayerManager.SpeedShovel;
-        if (resourceTag.Equals("Wood")) lifeObject.life -= PlayerManager.SpeedAxe;
+        if (resourceTag.Equals("WoodenLog")) lifeObject.life -= PlayerManager.SpeedAxe;
+
+        if (lifeObject.life <= 0) collectedItem();
     }
 
     private void showInventory()
     {
+
+        // Esto es para limpiar la consola
         var assembly = Assembly.GetAssembly(typeof(UnityEditor.Editor));
         var type = assembly.GetType("UnityEditor.LogEntries");
         var method = type.GetMethod("Clear");
         method.Invoke(new object(), null);
+        // Esto es para limpiar la consola
+
 
         foreach (Item item in PlayerManager.inventory)
         {
             Debug.Log(item.name + " - Cantidad: " + item.quantity);
         }
+    }
+
+    private void collectedItem()
+    {
+        Item newItemInv = new Item(this.infoItem.id, this.infoItem.name, this.infoItem.type, 1,
+                            this.infoItem.SpeedSwim, this.infoItem.SpeedDisplacement, this.infoItem.SpeedShovel,
+                            this.infoItem.SpeedAxe, this.infoItem.SpeedPeak);
+        
+        PlayerManager.storeItemInInventory(newItemInv);
+        
+        Destroy(this.infoItem.gameObject);
     }
 }

@@ -10,7 +10,7 @@ TagManager:
   - BodyPlayerBack
   - BodyPlayerRight
   - BodyPlayerLeft
-  - Wood
+  - WoodenLog
   layers:
   - Default
   - TransparentFX
