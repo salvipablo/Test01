@@ -4,6 +4,17 @@ using UnityEngine;
 
 public class BasicItems : MonoBehaviour
 {
+    private int[,] stockToBeRemoved = new int[5, 2];
+
+    private void Start()
+    {
+        stockToBeRemoved[0, 0] = 9999;
+        stockToBeRemoved[1, 0] = 9999;
+        stockToBeRemoved[2, 0] = 9999;
+        stockToBeRemoved[3, 0] = 9999;
+        stockToBeRemoved[4, 0] = 9999;
+    }
+
     public void craftTable()
     {
         Debug.Log("Mesa de crafteo");
@@ -11,89 +22,94 @@ public class BasicItems : MonoBehaviour
 
     public void woodenShovel()  // Pala de madera
     {
-        string[] items = { "Wood Plank", "Wood Sticks" };
-        int[] quantityItems = { 3, 2 };
-        
-        bool itemsExists = canICreateItem(items, quantityItems);
+        Dictionary<string, int> createWith = new Dictionary<string, int>();
 
-        if (itemsExists)
-        {
-            Item itemInsert = new Item(5, "Wooden Shovel", "Shovel_Wooden", 1, 0, 0, 5, 0, 0);
+        createWith.Add("Wood Plank", 3);
+        createWith.Add("Wood Sticks", 2);
 
-            itemsExists = false;
+        bool itemsExists = canICreateItem(createWith);
 
-            foreach (Item item in PlayerManager.inventory)
-            {
-                if (item.name.Equals("Wooden Shovel"))
-                {
-                    item.quantity += itemInsert.quantity;
-                    itemsExists = true;
-                }
-            }
-
-            if (!itemsExists) PlayerManager.inventory.Add(itemInsert);
-        }
+        if (!itemsExists) Debug.Log("No tiene los materiales para fabricar el item");
         else
         {
-            Debug.Log("No tiene los elementos para crear una pala de madera");
+            stockControl(this.stockToBeRemoved);
+
+            Item itemInsert = new Item(5, "Wooden Shovel", "Shovel_Wooden", 1, 0, 0, 5, 0, 0);
+
+            PlayerManager.storeItemInInventory(itemInsert);
         }
     }
 
     public void woodenAx()  // Hacha de madera.
     {
-        string[] items = { "Wood Plank", "Wood Sticks" };
-        int[] quantityItems = { 3, 2 };
+        Dictionary<string, int> createWith = new Dictionary<string, int>();
 
-        bool itemsExists = canICreateItem(items, quantityItems);
+        createWith.Add("Wood Plank", 2);
+        createWith.Add("Wood Sticks", 1);
 
-        if (itemsExists)
-        {
-            Item itemInsert = new Item(6, "Wooden Ax", "Ax_Wooden", 1, 0, 0, 0, 5, 0);
+        bool itemsExists = canICreateItem(createWith);
 
-            itemsExists = false;
-
-            foreach (Item item in PlayerManager.inventory)
-            {
-                if (item.name.Equals("Wooden Ax"))
-                {
-                    item.quantity += itemInsert.quantity;
-                    itemsExists = true;
-                }
-            }
-
-            if (!itemsExists) PlayerManager.inventory.Add(itemInsert);
-        }
+        if (!itemsExists) Debug.Log("No tiene los materiales para fabricar el item");
         else
         {
-            Debug.Log("No tiene los elementos para crear una pala de madera");
+            stockControl(this.stockToBeRemoved);
+
+            Item itemInsert = new Item(6, "Wooden Ax", "Ax_Wooden", 1, 0, 0, 0, 5, 0);
+
+            PlayerManager.storeItemInInventory(itemInsert);
         }
     }
 
     public void woodenPickaxe()
     {
-        Debug.Log("Pico de madera");
+        Dictionary<string, int> createWith = new Dictionary<string, int>();
+
+        createWith.Add("Wood Plank", 3);
+        createWith.Add("Wood Sticks", 4);
+
+        bool itemsExists = canICreateItem(createWith);
+
+        if (!itemsExists) Debug.Log("No tiene los materiales para fabricar el item");
+        else
+        {
+            stockControl(this.stockToBeRemoved);
+
+            Item itemInsert = new Item(6, "Wooden Pickaxe", "Pickaxe_Wooden", 1, 0, 0, 0, 0, 5);
+
+            PlayerManager.storeItemInInventory(itemInsert);
+        }
     }
 
-    public bool canICreateItem(string[] necessaryItems, int[] quantitiesNeeded)
+    private bool canICreateItem(Dictionary<string, int> necessaryMaterials)
     {
-        bool resourceFound = false;
+        bool foundResources = false;
 
-        for (int i = 0; i < necessaryItems.Length; i++)
+        foreach ( KeyValuePair<string, int> necessaryMaterial in necessaryMaterials)
         {
-            resourceFound = false;
+            foundResources = false;
 
-            foreach (Item itemInv in PlayerManager.inventory)
+            for (int i = 0; i < PlayerManager.inventory.Count; i++)
             {
-                if (itemInv.name.Equals(necessaryItems[i]) && itemInv.quantity > 0)
+                if (PlayerManager.inventory[i].name.Equals(necessaryMaterial.Key) && PlayerManager.inventory[i].quantity >= necessaryMaterial.Value)
                 {
-                    itemInv.quantity -= quantitiesNeeded[i];
-                    if (itemInv.quantity == 0) PlayerManager.inventory.Remove(itemInv);
-                    resourceFound = true;
+                    stockToBeRemoved[i, 0] = i;
+                    stockToBeRemoved[i, 1] = necessaryMaterial.Value;
+                    foundResources = true;
                     break;
                 }
             }
-        }
 
-        return resourceFound;
+        }
+        return foundResources;
+    }
+
+    private void stockControl(int[,] posToDeleteStock)
+    {
+        Debug.Log("Longitud de array de eliminacion" + posToDeleteStock.Length);
+        for (int i = 0; i < posToDeleteStock.Length / 2; i++)
+        {
+            if (posToDeleteStock[i, 0] != 9999)
+                    PlayerManager.inventory[posToDeleteStock[i, 0]].quantity -= posToDeleteStock[i, 1];
+        }
     }
 }

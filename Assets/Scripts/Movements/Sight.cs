@@ -1,5 +1,6 @@
 using System.Collections;
 using System.Collections.Generic;
+using System.Reflection;
 using UnityEngine;
 
 public class Sight : MonoBehaviour
@@ -48,6 +49,11 @@ public class Sight : MonoBehaviour
 
     private void showInventory()
     {
+        var assembly = Assembly.GetAssembly(typeof(UnityEditor.Editor));
+        var type = assembly.GetType("UnityEditor.LogEntries");
+        var method = type.GetMethod("Clear");
+        method.Invoke(new object(), null);
+
         foreach (Item item in PlayerManager.inventory)
         {
             Debug.Log(item.name + " - Cantidad: " + item.quantity);

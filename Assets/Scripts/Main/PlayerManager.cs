@@ -35,4 +35,20 @@ public static class PlayerManager
         PlayerManager.SpeedAxe += item.SpeedAxe;
         PlayerManager.SpeedPeak += item.SpeedPeak;
     }
+
+    public static void storeItemInInventory(Item newItem)
+    {
+        bool itemsExists = false;
+
+        foreach (Item item in PlayerManager.inventory)
+        {
+            if (item.name.Equals(newItem.name))
+            {
+                item.quantity += newItem.quantity;
+                itemsExists = true;
+            }
+        }
+
+        if (!itemsExists) PlayerManager.inventory.Add(newItem);
+    }
 }
