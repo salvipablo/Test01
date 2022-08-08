@@ -8,6 +8,7 @@ public class Sight : MonoBehaviour
     private LifeObject lifeObject;
     private InfoItem infoItem;
 
+    public GameObject objInventory;
     public GameObject objInsert;
 
     void Update()
@@ -65,6 +66,16 @@ public class Sight : MonoBehaviour
         method.Invoke(new object(), null);
         // Esto es para limpiar la consola
 
+        if (!objInventory.activeSelf)
+        {
+            Cursor.lockState = CursorLockMode.None;
+            objInventory.SetActive(true);
+        }
+        else
+        {
+            Cursor.lockState = CursorLockMode.Locked;
+            objInventory.SetActive(false);
+        }
 
         foreach (Item item in PlayerManager.inventory)
         {

@@ -19,6 +19,8 @@ public class PlayerMovement : MonoBehaviour
 
     private Rigidbody rb;
 
+    public GameObject objInventory;
+
     public bool ItCanMoveForward { get => itCanMoveForward; set => itCanMoveForward = value; }
     public bool ItCanMoveBackwards { get => itCanMoveBackwards; set => itCanMoveBackwards = value; }
     public bool ItCanMoveRight { get => itCanMoveRight; set => itCanMoveRight = value; }
@@ -33,14 +35,14 @@ public class PlayerMovement : MonoBehaviour
         ItCanMoveRight = true;
         ItCanMoveLeft = true;
 
-        //Cursor.lockState = CursorLockMode.Locked;
+        Cursor.lockState = CursorLockMode.Locked;
 
         camera = transform.Find("Camera");
     }
 
     private void Update()
     {
-        movements(Input.GetAxis("Mouse X"), Input.GetAxis("Mouse Y"));
+        if (!objInventory.activeSelf) movements(Input.GetAxis("Mouse X"), Input.GetAxis("Mouse Y"));
     }
 
     private void movements(float horizontalTwistMouse, float verticalTwistMouse)
