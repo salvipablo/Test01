@@ -10,7 +10,7 @@ public class Basic : MonoBehaviour
 
         foreach (Item item in PlayerManager.inventory)
         {
-            if (item.name.Equals("Common Wood") && item.quantity > 0)
+            if (item.name.Equals("Wooden Log") && item.quantity > 0)
             {
                 itemExists = true;
                 item.quantity -= 1;

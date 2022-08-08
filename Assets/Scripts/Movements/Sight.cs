@@ -8,8 +8,14 @@ public class Sight : MonoBehaviour
     private LifeObject lifeObject;
     private InfoItem infoItem;
 
+    public GameObject objInsert;
+
     void Update()
     {
+
+
+        if (Input.GetButtonDown("InsertCube")) insertCube();
+
         if (Input.GetButton("Fire2")) if (lifeObject != null) collectResource(lifeObject.gameObject.tag);
 
         if (Input.GetButton("item_Inv1")) inventoryPositionChange(PlayerManager.inventory[0]);
@@ -33,8 +39,6 @@ public class Sight : MonoBehaviour
     {
         lifeObject = collidedObject.GetComponent<LifeObject>();
         infoItem = collidedObject.GetComponent<InfoItem>();
-
-        Debug.Log(infoItem);
     }
 
     private void inventoryPositionChange(Item selectedItem)
@@ -77,5 +81,41 @@ public class Sight : MonoBehaviour
         PlayerManager.storeItemInInventory(newItemInv);
         
         Destroy(this.infoItem.gameObject);
+    }
+
+    public void insertCube()
+    {
+        Vector3 originPosition = new Vector3(Mathf.Round(gameObject.transform.position.x), 
+                                        Mathf.Round(gameObject.transform.position.y), 
+                                        Mathf.Round(gameObject.transform.position.z));
+        if ( thereIsCubeAside(originPosition)) Instantiate(this.objInsert, originPosition, new Quaternion(0,0,0,0));
+    }
+
+    public bool thereIsCubeAside(Vector3 originPosition)
+    {
+        RaycastHit hit;
+
+        Vector3 direction = new Vector3(0, 0, 0);
+
+        direction = new Vector3(0, 0, 0.6f);  // Adelante.
+        if (Physics.Raycast(originPosition, direction, out hit, 1)) return true;
+        
+        direction = new Vector3(0, 0, -0.6f);  // Atras.
+        if (Physics.Raycast(originPosition, direction, out hit, 1)) 
+            if (!hit.collider.gameObject.tag.Equals("Player")) return true;
+
+        direction = new Vector3(0.6f, 0, 0);  // Derecha.
+        if (Physics.Raycast(originPosition, direction, out hit, 1)) return true;
+
+        direction = new Vector3(-0.6f, 0, 0);  // Izquierda.
+        if (Physics.Raycast(originPosition, direction, out hit, 1)) return true;
+
+        direction = new Vector3(0, 0.6f, 0);  // Arriba.
+        if (Physics.Raycast(originPosition, direction, out hit, 1)) return true;
+
+        direction = new Vector3(0, -0.6f, 0);  // Abajo.
+        if (Physics.Raycast(originPosition, direction, out hit, 1)) return true;
+
+        return false;
     }
 }
