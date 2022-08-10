@@ -8,6 +8,7 @@ public class PlayerInitializer : MonoBehaviour
     void Start()
     {
         PlayerManager.SettingCharacterStatesByDefault();
+        PlayerManager.loadItemsForConstruction();
     }
 
     // Update is called once per frame

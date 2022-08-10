@@ -13,18 +13,16 @@ public class Sight : MonoBehaviour
 
     void Update()
     {
-
-
         if (Input.GetButtonDown("InsertCube")) insertCube();
 
         if (Input.GetButton("Fire2")) if (lifeObject != null) collectResource(lifeObject.gameObject.tag);
 
-        if (Input.GetButton("item_Inv1")) inventoryPositionChange(PlayerManager.inventory[0]);
-        if (Input.GetButton("item_Inv2")) inventoryPositionChange(PlayerManager.inventory[1]);
-        if (Input.GetButton("item_Inv3")) inventoryPositionChange(PlayerManager.inventory[2]);
-        if (Input.GetButton("item_Inv4")) inventoryPositionChange(PlayerManager.inventory[3]);
-        if (Input.GetButton("item_Inv5")) inventoryPositionChange(PlayerManager.inventory[4]);
-        if (Input.GetButton("item_Inv6")) inventoryPositionChange(PlayerManager.inventory[5]);
+        if (Input.GetButton("item_Inv1")) inventoryPositionChange(PlayerManager.Inventory[0]);
+        if (Input.GetButton("item_Inv2")) inventoryPositionChange(PlayerManager.Inventory[1]);
+        if (Input.GetButton("item_Inv3")) inventoryPositionChange(PlayerManager.Inventory[2]);
+        if (Input.GetButton("item_Inv4")) inventoryPositionChange(PlayerManager.Inventory[3]);
+        if (Input.GetButton("item_Inv5")) inventoryPositionChange(PlayerManager.Inventory[4]);
+        if (Input.GetButton("item_Inv6")) inventoryPositionChange(PlayerManager.Inventory[5]);
 
         if (Input.GetButtonDown("Inventario")) showInventory();
 
@@ -77,7 +75,7 @@ public class Sight : MonoBehaviour
             objInventory.SetActive(false);
         }
 
-        foreach (Item item in PlayerManager.inventory)
+        foreach (Item item in PlayerManager.Inventory)
         {
             Debug.Log(item.name + " - Cantidad: " + item.quantity);
         }
@@ -87,7 +85,7 @@ public class Sight : MonoBehaviour
     {
         Item newItemInv = new Item(this.infoItem.id, this.infoItem.name, this.infoItem.type, 1,
                             this.infoItem.SpeedSwim, this.infoItem.SpeedDisplacement, this.infoItem.SpeedShovel,
-                            this.infoItem.SpeedAxe, this.infoItem.SpeedPeak);
+                            this.infoItem.SpeedAxe, this.infoItem.SpeedPeak, null, null);
         
         PlayerManager.storeItemInInventory(newItemInv);
         

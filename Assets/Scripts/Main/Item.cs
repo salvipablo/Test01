@@ -2,10 +2,10 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class Item : MonoBehaviour
+public class Item
 {
     public int id;
-    public new string name;
+    public string name;
     public string type;
     public int quantity;
     public float SpeedSwim;  // Nadar
@@ -13,8 +13,12 @@ public class Item : MonoBehaviour
     public float SpeedShovel;  // Pala.
     public float SpeedAxe;  // Hacha.
     public float SpeedPeak;  // Pico.
+    private string[] materials;
+    private int[] amounts;
 
-    public Item(int id, string name, string type, int quantity, float speedSwim, float speedDisplacement, float speedShovel, float speedAxe, float speedPeak)
+
+    public Item(int id, string name, string type, int quantity, float speedSwim, float speedDisplacement, 
+                                    float speedShovel, float speedAxe, float speedPeak, string[] materials, int[] amounts)
     {
         this.id = id;
         this.name = name;
@@ -25,5 +29,17 @@ public class Item : MonoBehaviour
         this.SpeedShovel = speedShovel;
         this.SpeedAxe = speedAxe;
         this.SpeedPeak = speedPeak;
+        this.materials = materials;
+        this.amounts = amounts;
+    }
+
+    public string[] getMaterials()
+    {
+        return this.materials;
+    }
+
+    public int[] getAmounts()
+    {
+        return this.amounts;
     }
 }
