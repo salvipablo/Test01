@@ -43,31 +43,46 @@ public static class PlayerManager
         Items.Add(new Item(1, "Wooden Log", "Log_Wooden", 0, 0, 0, 0, 0, 0, null, null));  // Tronco de madera.
         Items.Add(new Item(1, "Wood Plank", "Plank_Wood", 0, 0, 0, 0, 0, 0, new string[] { "Wooden Log" }, new int[] { 1 }));  // Tabla de madera.
         Items.Add(new Item(1, "Wood Sticks", "Sticks_Wood", 0, 0, 0, 0, 0, 0, new string[] { "Wood Plank" }, new int[] { 1 }));  // Palito.
-        Items.Add(new Item(1, "Wooden Shovel", "Shovel_Wooden", 0, 0, 0, 0, 0, 0, new string[] { "Wood Plank", "Wood Sticks" }, new int[] { 3, 2 }));  // Pala de madera.
-        Items.Add(new Item(1, "Wooden Ax", "Ax_Wooden", 0, 0, 0, 0, 0, 0, new string[] { "Wood Plank", "Wood Sticks" }, new int[] { 2, 1 }));  // Hacha de madera.
-        Items.Add(new Item(1, "Wooden Pickaxe", "Pickaxe_Wooden", 0, 0, 0, 0, 0, 0, new string[] { "Wood Plank", "Wood Sticks" }, new int[] { 3, 4 }));  // Pico de madera.
+        Items.Add(new Item(1, "Wooden Shovel", "Shovel_Wooden", 0, 0, 0, 5, 0, 0, new string[] { "Wood Plank", "Wood Sticks" }, new int[] { 3, 2 }));  // Pala de madera.
+        Items.Add(new Item(1, "Wooden Ax", "Ax_Wooden", 0, 0, 0, 0, 5, 0, new string[] { "Wood Plank", "Wood Sticks" }, new int[] { 2, 1 }));  // Hacha de madera.
+        Items.Add(new Item(1, "Wooden Pickaxe", "Pickaxe_Wooden", 0, 0, 0, 0, 0, 5, new string[] { "Wood Plank", "Wood Sticks" }, new int[] { 3, 4 }));  // Pico de madera.
     }
 
     public static void storeItemInInventory(Item newItem)
     {
 
-        // Busco si existe.
-        //int posItemFound = PlayerManager.Inventory.IndexOf();
+        int posItemFound = 1;
+        int posArraySearch = 0;
 
-        Debug.Log(posItemFound);
-
-        bool itemsExists = false;
-
-        foreach (Item item in PlayerManager.Inventory)
+        while (posItemFound != -1)
         {
-            if (item.name.Equals(newItem.name))
+            // Busco si existe
+            posItemFound = PlayerManager.Inventory.FindIndex(posArraySearch, x => x.name.Equals(newItem.name));
+
+            if (posItemFound != -1)
             {
-                item.quantity += newItem.quantity;
-                itemsExists = true;
+                // Si existe, veo que la cantidad sea menor a 5 y le sumo. Y termino el bucle
+                if (PlayerManager.Inventory[posItemFound].quantity < 5)
+                {
+                    Debug.Log("Lo encontre y le puedo sumar 1 - " + posItemFound);
+                    PlayerManager.Inventory[posItemFound].quantity += 1;
+                    break;
+                } else
+                {
+                    Debug.Log("Lo encontre y no le puedo sumar 1 - lo busco mas adelante - " + posItemFound);
+                    posArraySearch = posItemFound + 1;
+                }
             }
         }
 
-        if (!itemsExists) PlayerManager.Inventory.Add(newItem);
+        Debug.Log("Sali del while, posItemFound vale: " + posItemFound);
+
+        // Si llego aca y el posItemFound quedo en -1 quiere decir que no fue encontrado, osea que hay que crear un nuevo item.
+        if (posItemFound == -1)
+        {
+            if (PlayerManager.Inventory.Count == 8) Debug.Log("No hay slot libre para almacenar este item: " + newItem.name);
+            else PlayerManager.Inventory.Add(newItem);
+        }
     }
 
     private static bool canICreateItem(Dictionary<string, int> necessaryMaterials)
@@ -95,10 +110,18 @@ public static class PlayerManager
 
     private static void stockControl(Dictionary<string, int> necessaryMaterials)
     {
+        Item emptyNull = new Item(0, "Empty", "Empty", 0, 0, 0, 0, 0, 0, null, null);
+
         foreach (KeyValuePair<string, int> necessaryMaterial in necessaryMaterials)
         {
-            Item itemInventory = PlayerManager.Inventory.Find(x => x.name.Equals(necessaryMaterial.Key));
-            itemInventory.quantity -= necessaryMaterial.Value;
+            int PosItem = PlayerManager.Inventory.FindIndex(x => x.name.Equals(necessaryMaterial.Key));
+
+            if (PosItem != -1)
+            {
+                PlayerManager.Inventory[PosItem].quantity -= necessaryMaterial.Value;
+
+                if (PlayerManager.Inventory[PosItem].quantity <= 0) PlayerManager.Inventory[PosItem] = emptyNull;
+            }
         }
     }
 
