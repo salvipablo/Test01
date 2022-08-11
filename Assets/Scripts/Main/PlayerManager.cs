@@ -19,22 +19,13 @@ public static class PlayerManager
     public static List<Item> Inventory = new List<Item>();
     public static List<Item> Items = new List<Item>();
 
-    public static void SettingCharacterStatesByDefault()
-    {
-        PlayerManager.name = "PJS";
-        PlayerManager.speedSwim = 1;
-        PlayerManager.SpeedDisplacement = 1;
-        PlayerManager.SpeedShovel = 1;
-        PlayerManager.SpeedAxe = 1;
-        PlayerManager.SpeedPeak = 1;
-    }
     public static void SettingCharacterStatesPerItem(Item item)
     {
-        PlayerManager.speedSwim += item.SpeedSwim;
-        PlayerManager.SpeedDisplacement += item.SpeedDisplacement;
-        PlayerManager.SpeedShovel += item.SpeedShovel;
-        PlayerManager.SpeedAxe += item.SpeedAxe;
-        PlayerManager.SpeedPeak += item.SpeedPeak;
+        PlayerManager.speedSwim = 1 + item.SpeedSwim;
+        PlayerManager.SpeedDisplacement = 1 + item.SpeedDisplacement;
+        PlayerManager.SpeedShovel = 1 + item.SpeedShovel;
+        PlayerManager.SpeedAxe = 1 + item.SpeedAxe;
+        PlayerManager.SpeedPeak = 1 + item.SpeedPeak;
     }
 
     public static void loadItemsForConstruction()
@@ -56,28 +47,18 @@ public static class PlayerManager
 
         while (posItemFound != -1)
         {
-            // Busco si existe
             posItemFound = PlayerManager.Inventory.FindIndex(posArraySearch, x => x.name.Equals(newItem.name));
 
             if (posItemFound != -1)
             {
-                // Si existe, veo que la cantidad sea menor a 5 y le sumo. Y termino el bucle
                 if (PlayerManager.Inventory[posItemFound].quantity < 5)
                 {
-                    Debug.Log("Lo encontre y le puedo sumar 1 - " + posItemFound);
                     PlayerManager.Inventory[posItemFound].quantity += 1;
                     break;
-                } else
-                {
-                    Debug.Log("Lo encontre y no le puedo sumar 1 - lo busco mas adelante - " + posItemFound);
-                    posArraySearch = posItemFound + 1;
-                }
+                } else posArraySearch = posItemFound + 1;
             }
         }
 
-        Debug.Log("Sali del while, posItemFound vale: " + posItemFound);
-
-        // Si llego aca y el posItemFound quedo en -1 quiere decir que no fue encontrado, osea que hay que crear un nuevo item.
         if (posItemFound == -1)
         {
             if (PlayerManager.Inventory.Count == 8) Debug.Log("No hay slot libre para almacenar este item: " + newItem.name);

@@ -17,12 +17,22 @@ public class Sight : MonoBehaviour
 
         if (Input.GetButton("Fire2")) if (lifeObject != null) collectResource(lifeObject.gameObject.tag);
 
-        if (Input.GetButton("item_Inv1")) inventoryPositionChange(PlayerManager.Inventory[0]);
-        if (Input.GetButton("item_Inv2")) inventoryPositionChange(PlayerManager.Inventory[1]);
-        if (Input.GetButton("item_Inv3")) inventoryPositionChange(PlayerManager.Inventory[2]);
-        if (Input.GetButton("item_Inv4")) inventoryPositionChange(PlayerManager.Inventory[3]);
-        if (Input.GetButton("item_Inv5")) inventoryPositionChange(PlayerManager.Inventory[4]);
-        if (Input.GetButton("item_Inv6")) inventoryPositionChange(PlayerManager.Inventory[5]);
+        if (Input.GetButtonDown("item_Inv1")) inventoryPositionChange(PlayerManager.Inventory[0]);
+        if (Input.GetButtonDown("item_Inv2")) inventoryPositionChange(PlayerManager.Inventory[1]);
+        if (Input.GetButtonDown("item_Inv3")) inventoryPositionChange(PlayerManager.Inventory[2]);
+        if (Input.GetButtonDown("item_Inv4")) inventoryPositionChange(PlayerManager.Inventory[3]);
+        if (Input.GetButtonDown("item_Inv5")) inventoryPositionChange(PlayerManager.Inventory[4]);
+        if (Input.GetButtonDown("item_Inv6")) inventoryPositionChange(PlayerManager.Inventory[5]);
+        if (Input.GetButtonDown("item_Inv7")) inventoryPositionChange(PlayerManager.Inventory[6]);
+        if (Input.GetButtonDown("item_Inv8")) inventoryPositionChange(PlayerManager.Inventory[7]);
+
+        if (Input.GetButtonDown("Caracter"))
+        {
+            Debug.Log("*** DATOS PERSONAJE ***");
+            Debug.Log("Velocidad de Pala: " + PlayerManager.SpeedShovel);
+            Debug.Log("Velocidad de Hacha: " + PlayerManager.SpeedAxe);
+            Debug.Log("Velocidad de Pico: " + PlayerManager.SpeedPeak);
+        }
 
         if (Input.GetButtonDown("Inventario")) showInventory();
 
@@ -42,7 +52,6 @@ public class Sight : MonoBehaviour
 
     private void inventoryPositionChange(Item selectedItem)
     {
-        PlayerManager.SettingCharacterStatesByDefault();
         PlayerManager.SettingCharacterStatesPerItem(selectedItem);
     }
 

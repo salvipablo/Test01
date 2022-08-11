@@ -7,13 +7,9 @@ public class PlayerInitializer : MonoBehaviour
     // Start is called before the first frame update
     void Start()
     {
-        PlayerManager.SettingCharacterStatesByDefault();
         PlayerManager.loadItemsForConstruction();
-    }
 
-    // Update is called once per frame
-    void Update()
-    {
-        
+        Item emptyNull = new Item(0, "Empty", "Empty", 0, 0, 0, 0, 0, 0, null, null);
+        PlayerManager.SettingCharacterStatesPerItem(emptyNull);
     }
 }
