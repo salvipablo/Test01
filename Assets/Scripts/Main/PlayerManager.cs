@@ -32,11 +32,11 @@ public static class PlayerManager
     {
         Items.Add(new Item(1, "Common Land", "Land_Common", 0, 0, 0, 0, 0, 0, null, null));  // Tierra comun.
         Items.Add(new Item(1, "Wooden Log", "Log_Wooden", 0, 0, 0, 0, 0, 0, null, null));  // Tronco de madera.
-        Items.Add(new Item(1, "Wood Plank", "Plank_Wood", 0, 0, 0, 0, 0, 0, new string[] { "Wooden Log" }, new int[] { 1 }));  // Tabla de madera.
-        Items.Add(new Item(1, "Wood Sticks", "Sticks_Wood", 0, 0, 0, 0, 0, 0, new string[] { "Wood Plank" }, new int[] { 1 }));  // Palito.
-        Items.Add(new Item(1, "Wooden Shovel", "Shovel_Wooden", 0, 0, 0, 5, 0, 0, new string[] { "Wood Plank", "Wood Sticks" }, new int[] { 3, 2 }));  // Pala de madera.
-        Items.Add(new Item(1, "Wooden Ax", "Ax_Wooden", 0, 0, 0, 0, 5, 0, new string[] { "Wood Plank", "Wood Sticks" }, new int[] { 2, 1 }));  // Hacha de madera.
-        Items.Add(new Item(1, "Wooden Pickaxe", "Pickaxe_Wooden", 0, 0, 0, 0, 0, 5, new string[] { "Wood Plank", "Wood Sticks" }, new int[] { 3, 4 }));  // Pico de madera.
+        Items.Add(new Item(1, "Wood Plank", "Plank_Wood", 0, 0, 0, 0, 0, 0, new string[] { "Wooden Log" }, new float[] { 0.1f }));  // Tabla de madera.
+        Items.Add(new Item(1, "Wood Sticks", "Sticks_Wood", 0, 0, 0, 0, 0, 0, new string[] { "Wood Plank" }, new float[] { 1 }));  // Palito.
+        Items.Add(new Item(1, "Wooden Shovel", "Shovel_Wooden", 0, 0, 0, 5, 0, 0, new string[] { "Wood Plank", "Wood Sticks" }, new float[] { 3, 2 }));  // Pala de madera.
+        Items.Add(new Item(1, "Wooden Ax", "Ax_Wooden", 0, 0, 0, 0, 5, 0, new string[] { "Wood Plank", "Wood Sticks" }, new float[] { 2, 1 }));  // Hacha de madera.
+        Items.Add(new Item(1, "Wooden Pickaxe", "Pickaxe_Wooden", 0, 0, 0, 0, 0, 5, new string[] { "Wood Plank", "Wood Sticks" }, new float[] { 3, 4 }));  // Pico de madera.
     }
 
     public static void storeItemInInventory(Item newItem)
@@ -66,11 +66,11 @@ public static class PlayerManager
         }
     }
 
-    private static bool canICreateItem(Dictionary<string, int> necessaryMaterials)
+    private static bool canICreateItem(Dictionary<string, float> necessaryMaterials)
     {
         bool foundResources = false;
 
-        foreach (KeyValuePair<string, int> necessaryMaterial in necessaryMaterials)
+        foreach (KeyValuePair<string, float> necessaryMaterial in necessaryMaterials)
         {
             foundResources = false;
 
@@ -89,11 +89,11 @@ public static class PlayerManager
         return foundResources;
     }
 
-    private static void stockControl(Dictionary<string, int> necessaryMaterials)
+    private static void stockControl(Dictionary<string, float> necessaryMaterials)
     {
         Item emptyNull = new Item(0, "Empty", "Empty", 0, 0, 0, 0, 0, 0, null, null);
 
-        foreach (KeyValuePair<string, int> necessaryMaterial in necessaryMaterials)
+        foreach (KeyValuePair<string, float> necessaryMaterial in necessaryMaterials)
         {
             int PosItem = PlayerManager.Inventory.FindIndex(x => x.name.Equals(necessaryMaterial.Key));
 
@@ -101,7 +101,7 @@ public static class PlayerManager
             {
                 PlayerManager.Inventory[PosItem].quantity -= necessaryMaterial.Value;
 
-                if (PlayerManager.Inventory[PosItem].quantity <= 0) PlayerManager.Inventory[PosItem] = emptyNull;
+                if (PlayerManager.Inventory[PosItem].quantity <= 0.0) PlayerManager.Inventory[PosItem] = emptyNull;
             }
         }
     }
@@ -110,7 +110,7 @@ public static class PlayerManager
     {
         Item itemBuild = PlayerManager.Items.Find(x => x.name.Equals(nameOfItemToCreate));
 
-        Dictionary<string, int> createWith = new Dictionary<string, int>();
+        Dictionary<string, float> createWith = new Dictionary<string, float>();
         for (int i = 0; i < itemBuild.getMaterials().Length; i++)
         {
             createWith.Add(itemBuild.getMaterials()[i], itemBuild.getAmounts()[i]);

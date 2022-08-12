@@ -7,18 +7,18 @@ public class Item
     public int id;
     public string name;
     public string type;
-    public int quantity;
+    public float quantity;
     public float SpeedSwim;  // Nadar
     public float SpeedDisplacement;  // Caminar
     public float SpeedShovel;  // Pala.
     public float SpeedAxe;  // Hacha.
     public float SpeedPeak;  // Pico.
     private string[] materials;
-    private int[] amounts;
+    private float[] amounts;
 
 
     public Item(int id, string name, string type, int quantity, float speedSwim, float speedDisplacement, 
-                                    float speedShovel, float speedAxe, float speedPeak, string[] materials, int[] amounts)
+                                    float speedShovel, float speedAxe, float speedPeak, string[] materials, float[] amounts)
     {
         this.id = id;
         this.name = name;
@@ -38,7 +38,7 @@ public class Item
         return this.materials;
     }
 
-    public int[] getAmounts()
+    public float[] getAmounts()
     {
         return this.amounts;
     }
