@@ -65,8 +65,15 @@ public static class PlayerManager
                 if (PlayerManager.Inventory.Count == 8) Debug.Log("No hay slot libre para almacenar este item: " + newItem.name);
                 else
                 {
-                    if ( newItem.quantity > 1) newItem.quantity = 1;
-                    PlayerManager.Inventory.Add(newItem);
+                    Item itemStore = new Item(newItem.id, newItem.name, newItem.type, 1, newItem.SpeedSwim, newItem.SpeedDisplacement,
+                                                   newItem.SpeedShovel, newItem.SpeedAxe, newItem.SpeedPeak, newItem.getMaterials(), newItem.getAmounts());
+
+                    posItemFound = PlayerManager.Inventory.FindIndex(posArraySearch, x => x.name.Equals("Empty"));
+
+                    Debug.Log(posItemFound);
+
+                    if (posItemFound != -1) PlayerManager.Inventory[posItemFound] = itemStore;
+                    else PlayerManager.Inventory.Add(itemStore);
                 }
             }
         }
