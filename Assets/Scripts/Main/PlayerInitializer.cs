@@ -33,14 +33,14 @@ public class PlayerInitializer : MonoBehaviour
         this.previousLifeSpeedAxe = 0;
         this.previousLifeSpeedPeak = 0;
 
-        this.txtInvt_1.text = "-";
-        this.txtInvt_2.text = "-";
-        this.txtInvt_3.text = "-";
-        this.txtInvt_4.text = "-";
-        this.txtInvt_5.text = "-";
-        this.txtInvt_6.text = "-";
-        this.txtInvt_7.text = "-";
-        this.txtInvt_8.text = "-";
+        this.txtInvt_1.text = "1";
+        this.txtInvt_2.text = "2";
+        this.txtInvt_3.text = "3";
+        this.txtInvt_4.text = "4";
+        this.txtInvt_5.text = "5";
+        this.txtInvt_6.text = "6";
+        this.txtInvt_7.text = "7";
+        this.txtInvt_8.text = "8";
 
         PlayerManager.loadItemsForConstruction();
 
@@ -58,16 +58,13 @@ public class PlayerInitializer : MonoBehaviour
             this.txt_4.text = PlayerManager.SpeedPeak.ToString();
         }
 
-        //Debug.Log(PlayerManager.Inventory.Count);
-
-        if (PlayerManager.Inventory.Count == 1) this.txtInvt_1.text = PlayerManager.Inventory[0].name;
-        if (PlayerManager.Inventory.Count == 2) this.txtInvt_2.text = PlayerManager.Inventory[1].name;
-        if (PlayerManager.Inventory.Count == 3) this.txtInvt_3.text = PlayerManager.Inventory[2].name;
-        if (PlayerManager.Inventory.Count == 4) this.txtInvt_4.text = PlayerManager.Inventory[3].name;
-        if (PlayerManager.Inventory.Count == 5) this.txtInvt_5.text = PlayerManager.Inventory[4].name;
-        if (PlayerManager.Inventory.Count == 6) this.txtInvt_6.text = PlayerManager.Inventory[5].name;
-        if (PlayerManager.Inventory.Count == 7) this.txtInvt_7.text = PlayerManager.Inventory[6].name;
-        if (PlayerManager.Inventory.Count == 8) this.txtInvt_8.text = PlayerManager.Inventory[7].name;
-
+        if (PlayerManager.Inventory.Count > 0) this.txtInvt_1.text = PlayerManager.Inventory[0].name + "-" + PlayerManager.Inventory[0].quantity;
+        if (PlayerManager.Inventory.Count > 1) this.txtInvt_2.text = PlayerManager.Inventory[1].name + "-" + PlayerManager.Inventory[1].quantity;
+        if (PlayerManager.Inventory.Count > 2) this.txtInvt_3.text = PlayerManager.Inventory[2].name + "-" + PlayerManager.Inventory[2].quantity;
+        if (PlayerManager.Inventory.Count > 3) this.txtInvt_4.text = PlayerManager.Inventory[3].name + "-" + PlayerManager.Inventory[3].quantity;
+        if (PlayerManager.Inventory.Count > 4) this.txtInvt_5.text = PlayerManager.Inventory[4].name + "-" + PlayerManager.Inventory[4].quantity;
+        if (PlayerManager.Inventory.Count > 5) this.txtInvt_6.text = PlayerManager.Inventory[5].name + "-" + PlayerManager.Inventory[5].quantity;
+        if (PlayerManager.Inventory.Count > 6) this.txtInvt_7.text = PlayerManager.Inventory[6].name + "-" + PlayerManager.Inventory[6].quantity;
+        if (PlayerManager.Inventory.Count > 7) this.txtInvt_8.text = PlayerManager.Inventory[7].name + "-" + PlayerManager.Inventory[7].quantity;
     }
 }

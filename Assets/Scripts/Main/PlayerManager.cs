@@ -32,45 +32,51 @@ public static class PlayerManager
     {
         Items.Add(new Item(1, "Common Land", "Land_Common", 0, 0, 0, 0, 0, 0, null, null));  // Tierra comun.
         Items.Add(new Item(1, "Wooden Log", "Log_Wooden", 0, 0, 0, 0, 0, 0, null, null));  // Tronco de madera.
-        Items.Add(new Item(1, "Wood Plank", "Plank_Wood", 0, 0, 0, 0, 0, 0, new string[] { "Wooden Log" }, new float[] { 0.1f }));  // Tabla de madera.
-        Items.Add(new Item(1, "Wood Sticks", "Sticks_Wood", 0, 0, 0, 0, 0, 0, new string[] { "Wood Plank" }, new float[] { 1 }));  // Palito.
-        Items.Add(new Item(1, "Wooden Shovel", "Shovel_Wooden", 0, 0, 0, 5, 0, 0, new string[] { "Wood Plank", "Wood Sticks" }, new float[] { 3, 2 }));  // Pala de madera.
-        Items.Add(new Item(1, "Wooden Ax", "Ax_Wooden", 0, 0, 0, 0, 5, 0, new string[] { "Wood Plank", "Wood Sticks" }, new float[] { 2, 1 }));  // Hacha de madera.
-        Items.Add(new Item(1, "Wooden Pickaxe", "Pickaxe_Wooden", 0, 0, 0, 0, 0, 5, new string[] { "Wood Plank", "Wood Sticks" }, new float[] { 3, 4 }));  // Pico de madera.
+        Items.Add(new Item(1, "Wood Plank", "Plank_Wood", 0, 0, 0, 0, 0, 0, new string[] { "Wooden Log" }, new int[] { 1 }));  // Tabla de madera.
+        Items.Add(new Item(1, "Wood Sticks", "Sticks_Wood", 0, 0, 0, 0, 0, 0, new string[] { "Wood Plank" }, new int[] { 1 }));  // Palito.
+        Items.Add(new Item(1, "Wooden Shovel", "Shovel_Wooden", 0, 0, 0, 5, 0, 0, new string[] { "Wood Plank", "Wood Sticks" }, new int[] { 3, 2 }));  // Pala de madera.
+        Items.Add(new Item(1, "Wooden Ax", "Ax_Wooden", 0, 0, 0, 0, 5, 0, new string[] { "Wood Plank", "Wood Sticks" }, new int[] { 2, 1 }));  // Hacha de madera.
+        Items.Add(new Item(1, "Wooden Pickaxe", "Pickaxe_Wooden", 0, 0, 0, 0, 0, 5, new string[] { "Wood Plank", "Wood Sticks" }, new int[] { 3, 4 }));  // Pico de madera.
     }
 
-    public static void storeItemInInventory(Item newItem)
+    public static void storeItemInInventory(Item newItem, int amountToStore)
     {
-
         int posItemFound = 1;
         int posArraySearch = 0;
 
-        while (posItemFound != -1)
+        for (int i = 0; i < amountToStore; i++)
         {
             posItemFound = PlayerManager.Inventory.FindIndex(posArraySearch, x => x.name.Equals(newItem.name));
-
+            
             if (posItemFound != -1)
             {
-                if (PlayerManager.Inventory[posItemFound].quantity < 5)
-                {
-                    PlayerManager.Inventory[posItemFound].quantity += 1;
-                    break;
-                } else posArraySearch = posItemFound + 1;
-            }
-        }
+                Debug.Log("Quantity de newItem: " + newItem.quantity);
 
-        if (posItemFound == -1)
-        {
-            if (PlayerManager.Inventory.Count == 8) Debug.Log("No hay slot libre para almacenar este item: " + newItem.name);
-            else PlayerManager.Inventory.Add(newItem);
+                if (PlayerManager.Inventory[posItemFound].quantity < 5) PlayerManager.Inventory[posItemFound].quantity += 1;
+                else
+                {
+                    posArraySearch = posItemFound + 1;
+                    posItemFound = -1;
+                }
+            }
+
+            if (posItemFound == -1)
+            {
+                if (PlayerManager.Inventory.Count == 8) Debug.Log("No hay slot libre para almacenar este item: " + newItem.name);
+                else
+                {
+                    if ( newItem.quantity > 1) newItem.quantity = 1;
+                    PlayerManager.Inventory.Add(newItem);
+                }
+            }
         }
     }
 
-    private static bool canICreateItem(Dictionary<string, float> necessaryMaterials)
+    private static bool canICreateItem(Dictionary<string, int> necessaryMaterials)
     {
         bool foundResources = false;
 
-        foreach (KeyValuePair<string, float> necessaryMaterial in necessaryMaterials)
+        foreach (KeyValuePair<string, int> necessaryMaterial in necessaryMaterials)
         {
             foundResources = false;
 
@@ -89,18 +95,17 @@ public static class PlayerManager
         return foundResources;
     }
 
-    private static void stockControl(Dictionary<string, float> necessaryMaterials)
+    private static void stockControl(Dictionary<string, int> necessaryMaterials)
     {
         Item emptyNull = new Item(0, "Empty", "Empty", 0, 0, 0, 0, 0, 0, null, null);
 
-        foreach (KeyValuePair<string, float> necessaryMaterial in necessaryMaterials)
+        foreach (KeyValuePair<string, int> necessaryMaterial in necessaryMaterials)
         {
             int PosItem = PlayerManager.Inventory.FindIndex(x => x.name.Equals(necessaryMaterial.Key));
-
+            Debug.Log("Posicion donde encontro el item:" + PosItem);
             if (PosItem != -1)
             {
                 PlayerManager.Inventory[PosItem].quantity -= necessaryMaterial.Value;
-
                 if (PlayerManager.Inventory[PosItem].quantity <= 0.0) PlayerManager.Inventory[PosItem] = emptyNull;
             }
         }
@@ -110,25 +115,21 @@ public static class PlayerManager
     {
         Item itemBuild = PlayerManager.Items.Find(x => x.name.Equals(nameOfItemToCreate));
 
-        Dictionary<string, float> createWith = new Dictionary<string, float>();
+        Dictionary<string, int> createWith = new Dictionary<string, int>();
         for (int i = 0; i < itemBuild.getMaterials().Length; i++)
         {
             createWith.Add(itemBuild.getMaterials()[i], itemBuild.getAmounts()[i]);
         }
-
         bool canICreateThisMeterial = PlayerManager.canICreateItem(createWith);
 
         if (canICreateThisMeterial)
         {
             stockControl(createWith);
 
-            Item newItem = new Item(itemBuild.id, itemBuild.name, itemBuild.type, quantity, itemBuild.SpeedSwim, itemBuild.SpeedDisplacement,
+            Item newItem = new Item(itemBuild.id, itemBuild.name, itemBuild.type, 1, itemBuild.SpeedSwim, itemBuild.SpeedDisplacement,
                                         itemBuild.SpeedShovel, itemBuild.SpeedAxe, itemBuild.SpeedPeak, null, null);
 
-            PlayerManager.storeItemInInventory(newItem);
-        } else
-        {
-            Debug.Log("No tiene los materiales suficientes para crear este item");
-        }
+            PlayerManager.storeItemInInventory(newItem, quantity);
+        } else Debug.Log("No tiene los materiales suficientes para crear este item");
     }
 }

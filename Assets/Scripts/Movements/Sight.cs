@@ -84,9 +84,9 @@ public class Sight : MonoBehaviour
             objInventory.SetActive(false);
         }
 
-        foreach (Item item in PlayerManager.Inventory)
+        for ( int j = 0; j < PlayerManager.Inventory.Count; j++ )
         {
-            Debug.Log(item.name + " - Cantidad: " + item.quantity);
+            Debug.Log("Posicion del invetario (" + j + ")" + " - Item: " + PlayerManager.Inventory[j].name + " - Cantidad: " + PlayerManager.Inventory[j].quantity);
         }
     }
 
@@ -96,7 +96,7 @@ public class Sight : MonoBehaviour
                             this.infoItem.SpeedSwim, this.infoItem.SpeedDisplacement, this.infoItem.SpeedShovel,
                             this.infoItem.SpeedAxe, this.infoItem.SpeedPeak, null, null);
         
-        PlayerManager.storeItemInInventory(newItemInv);
+        PlayerManager.storeItemInInventory(newItemInv, 1);
         
         Destroy(this.infoItem.gameObject);
     }
