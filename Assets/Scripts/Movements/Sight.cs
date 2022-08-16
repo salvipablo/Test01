@@ -36,11 +36,12 @@ public class Sight : MonoBehaviour
 
         if (Input.GetButtonDown("Inventario")) showInventory();
 
-        if (Input.GetButtonDown("Informacion"))
+        if (Input.GetButtonDown("Materials"))
         {
-            Debug.Log("Velocidad de Pala:" + PlayerManager.SpeedShovel);
-            Debug.Log("Velocidad de Hacha:" + PlayerManager.SpeedAxe);
-            Debug.Log("Velocidad de pico:" + PlayerManager.SpeedPeak);
+            foreach (KeyValuePair<string, int> item in PlayerManager.itemsAndQuantities)
+            {
+                Debug.Log(item.Key + " - " + item.Value);
+            }
         }
     }
 

@@ -1,5 +1,6 @@
 using System.Collections;
 using System.Collections.Generic;
+using Unity.VisualScripting;
 using UnityEngine;
 
 public static class PlayerManager
@@ -18,6 +19,8 @@ public static class PlayerManager
 
     public static List<Item> Inventory = new List<Item>();
     public static List<Item> Items = new List<Item>();
+
+    public static Dictionary<string, int> itemsAndQuantities = new Dictionary<string, int>();
 
     public static void SettingCharacterStatesPerItem(Item item)
     {
@@ -39,38 +42,63 @@ public static class PlayerManager
         Items.Add(new Item(1, "Wooden Pickaxe", "Pickaxe_Wooden", 0, 0, 0, 0, 0, 5, new string[] { "Wood Plank", "Wood Sticks" }, new int[] { 3, 4 }));  // Pico de madera.
     }
 
+    public static void addQuantitiesOfItems(string nameItem, int amountToStore)
+    {
+        if (!PlayerManager.itemsAndQuantities.ContainsKey(nameItem)) PlayerManager.itemsAndQuantities.Add(nameItem, amountToStore);
+        else PlayerManager.itemsAndQuantities[nameItem] += amountToStore;
+    }
+
+    public static void substractQuantitiesOfItems(string nameItem, int amountToStore)
+    {
+        PlayerManager.itemsAndQuantities[nameItem] -= amountToStore;
+    }
+
     public static void storeItemInInventory(Item newItem, int amountToStore)
     {
+        addQuantitiesOfItems(newItem.name, amountToStore);
+
         int posItemFound = 1;
         int posArraySearch = 0;
 
-        for (int i = 0; i < amountToStore; i++)
+        while (amountToStore > 0)
         {
             posItemFound = PlayerManager.Inventory.FindIndex(posArraySearch, x => x.name.Equals(newItem.name));
             
-            if (posItemFound != -1)
+            if (posItemFound != -1 && PlayerManager.Inventory[posItemFound].quantity < 5)
             {
-                Debug.Log("Quantity de newItem: " + newItem.quantity);
-
-                if (PlayerManager.Inventory[posItemFound].quantity < 5) PlayerManager.Inventory[posItemFound].quantity += 1;
-                else
+                Debug.Log("Entro aca por que lo encontre pero quantity es menor a 5");
+                int howManyCanISave = 5 - PlayerManager.Inventory[posItemFound].quantity;
+                
+                if (howManyCanISave >= amountToStore)
                 {
+                    PlayerManager.Inventory[posItemFound].quantity += amountToStore;
+                    amountToStore = 0;
+                } else
+                {
+                    PlayerManager.Inventory[posItemFound].quantity += howManyCanISave;
+                    amountToStore -= howManyCanISave;
+                }
+            } else
+            {
+                if (posItemFound != -1 && PlayerManager.Inventory[posItemFound].quantity == 5)
+                {
+                    Debug.Log("Entro aca por que lo encontre pero quantity es igual a 5");
                     posArraySearch = posItemFound + 1;
-                    posItemFound = -1;
                 }
             }
 
             if (posItemFound == -1)
             {
-                if (PlayerManager.Inventory.Count == 8) Debug.Log("No hay slot libre para almacenar este item: " + newItem.name);
+                if (PlayerManager.Inventory.Count == 9) Debug.Log("No hay slot libre para almacenar este item: " + newItem.name);
                 else
                 {
-                    Item itemStore = new Item(newItem.id, newItem.name, newItem.type, 1, newItem.SpeedSwim, newItem.SpeedDisplacement,
-                                                   newItem.SpeedShovel, newItem.SpeedAxe, newItem.SpeedPeak, newItem.getMaterials(), newItem.getAmounts());
+                    Debug.Log("Entro aca porque no lo encontre y hay slots para crear o vacios");
+                    amountToStore -= 1;
 
+                    Item itemStore = PlayerManager.iThinkItem(newItem.id, newItem.name, newItem.type, 1, newItem.SpeedSwim, newItem.SpeedDisplacement,
+                                                    newItem.SpeedShovel, newItem.SpeedAxe, newItem.SpeedPeak);
+                    
                     posItemFound = PlayerManager.Inventory.FindIndex(posArraySearch, x => x.name.Equals("Empty"));
-
-                    Debug.Log(posItemFound);
 
                     if (posItemFound != -1) PlayerManager.Inventory[posItemFound] = itemStore;
                     else PlayerManager.Inventory.Add(itemStore);
@@ -86,19 +114,10 @@ public static class PlayerManager
         foreach (KeyValuePair<string, int> necessaryMaterial in necessaryMaterials)
         {
             foundResources = false;
-
-            for (int i = 0; i < PlayerManager.Inventory.Count; i++)
-            {
-                if (PlayerManager.Inventory[i].name.Equals(necessaryMaterial.Key) && PlayerManager.Inventory[i].quantity >= necessaryMaterial.Value)
-                {
-                    foundResources = true;
-                    break;
-                }
-            }
-
-            if (!foundResources) break;
+            if (PlayerManager.itemsAndQuantities.TryGetValue(necessaryMaterial.Key, out int value))
+                if (value >= necessaryMaterial.Value) foundResources = true;
+                else break;
         }
-
         return foundResources;
     }
 
@@ -106,14 +125,32 @@ public static class PlayerManager
     {
         Item emptyNull = new Item(0, "Empty", "Empty", 0, 0, 0, 0, 0, 0, null, null);
 
+        int posArraySearch = 0;
+
         foreach (KeyValuePair<string, int> necessaryMaterial in necessaryMaterials)
         {
-            int PosItem = PlayerManager.Inventory.FindIndex(x => x.name.Equals(necessaryMaterial.Key));
-            Debug.Log("Posicion donde encontro el item:" + PosItem);
-            if (PosItem != -1)
+            int amountToSubtract = necessaryMaterial.Value;
+
+            substractQuantitiesOfItems(necessaryMaterial.Key, necessaryMaterial.Value);
+
+            while (amountToSubtract > 0)
             {
-                PlayerManager.Inventory[PosItem].quantity -= necessaryMaterial.Value;
-                if (PlayerManager.Inventory[PosItem].quantity <= 0.0) PlayerManager.Inventory[PosItem] = emptyNull;
+                // Busco
+                int PosItem = PlayerManager.Inventory.FindIndex(posArraySearch, x => x.name.Equals(necessaryMaterial.Key));
+
+                if (PlayerManager.Inventory[PosItem].quantity >= amountToSubtract)
+                {
+                    PlayerManager.Inventory[PosItem].quantity -= amountToSubtract;
+                    amountToSubtract = 0;
+                }
+
+                if (PlayerManager.Inventory[PosItem].quantity < amountToSubtract)
+                {
+                    amountToSubtract -= PlayerManager.Inventory[PosItem].quantity;
+                    PlayerManager.Inventory[PosItem].quantity = 0;
+                }
+
+                if (PlayerManager.Inventory[PosItem].quantity <= 0) PlayerManager.Inventory[PosItem] = emptyNull;
             }
         }
     }
@@ -133,10 +170,12 @@ public static class PlayerManager
         {
             stockControl(createWith);
 
-            Item newItem = new Item(itemBuild.id, itemBuild.name, itemBuild.type, 1, itemBuild.SpeedSwim, itemBuild.SpeedDisplacement,
-                                        itemBuild.SpeedShovel, itemBuild.SpeedAxe, itemBuild.SpeedPeak, null, null);
-
-            PlayerManager.storeItemInInventory(newItem, quantity);
+            PlayerManager.storeItemInInventory(itemBuild, quantity);
         } else Debug.Log("No tiene los materiales suficientes para crear este item");
+    }
+
+    private static Item iThinkItem(int id, string name, string type, int quantity, float speedSwin, float speedDisplacement, float speedShovel, float speedAxe, float speedPeak)
+    {
+        return new Item(id, name, type, quantity, speedSwin, speedDisplacement, speedShovel, speedAxe, speedPeak, null, null);
     }
 }
