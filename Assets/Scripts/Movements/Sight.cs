@@ -38,6 +38,8 @@ public class Sight : MonoBehaviour
 
         if (Input.GetButtonDown("Materials"))
         {
+            clearConsole();
+
             foreach (KeyValuePair<string, int> item in PlayerManager.itemsAndQuantities)
             {
                 Debug.Log(item.Key + " - " + item.Value);
@@ -60,19 +62,14 @@ public class Sight : MonoBehaviour
     {
         if (resourceTag.Equals("Land")) lifeObject.life -= PlayerManager.SpeedShovel;
         if (resourceTag.Equals("WoodenLog")) lifeObject.life -= PlayerManager.SpeedAxe;
+        if (resourceTag.Equals("CStone")) lifeObject.life -= PlayerManager.SpeedPeak;
 
         if (lifeObject.life <= 0) collectedItem();
     }
 
     private void showInventory()
     {
-
-        // Esto es para limpiar la consola
-        var assembly = Assembly.GetAssembly(typeof(UnityEditor.Editor));
-        var type = assembly.GetType("UnityEditor.LogEntries");
-        var method = type.GetMethod("Clear");
-        method.Invoke(new object(), null);
-        // Esto es para limpiar la consola
+        clearConsole();
 
         if (!objInventory.activeSelf)
         {
@@ -136,5 +133,15 @@ public class Sight : MonoBehaviour
         if (Physics.Raycast(originPosition, direction, out hit, 1)) return true;
 
         return false;
+    }
+
+    private void clearConsole()
+    {
+        // Esto es para limpiar la consola
+        var assembly = Assembly.GetAssembly(typeof(UnityEditor.Editor));
+        var type = assembly.GetType("UnityEditor.LogEntries");
+        var method = type.GetMethod("Clear");
+        method.Invoke(new object(), null);
+        // Esto es para limpiar la consola
     }
 }

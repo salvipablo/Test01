@@ -15,4 +15,10 @@ public class BasicItems : MonoBehaviour
     public void woodenAx() => PlayerManager.createItem("Wooden Ax", 1);
 
     public void woodenPickaxe() => PlayerManager.createItem("Wooden Pickaxe", 1);
+
+    public void stoneShovel() => PlayerManager.createItem("Stone Shovel", 1);
+
+    public void stoneAx() => PlayerManager.createItem("Stone Ax", 1);
+
+    public void stonePickaxe() => PlayerManager.createItem("Stone Pickaxe", 1);
 }

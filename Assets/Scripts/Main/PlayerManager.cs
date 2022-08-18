@@ -1,5 +1,6 @@
 using System.Collections;
 using System.Collections.Generic;
+using System.Runtime.ConstrainedExecution;
 using Unity.VisualScripting;
 using UnityEngine;
 
@@ -16,6 +17,7 @@ public static class PlayerManager
     public static float SpeedShovel;  // Pala.
     public static float SpeedAxe;  // Hacha.
     public static float SpeedPeak;  // Pico.
+    public static int amountStorageSlot;
 
     public static List<Item> Inventory = new List<Item>();
     public static List<Item> Items = new List<Item>();
@@ -29,17 +31,22 @@ public static class PlayerManager
         PlayerManager.SpeedShovel = 1 + item.SpeedShovel;
         PlayerManager.SpeedAxe = 1 + item.SpeedAxe;
         PlayerManager.SpeedPeak = 1 + item.SpeedPeak;
+        PlayerManager.amountStorageSlot = 20;
     }
 
     public static void loadItemsForConstruction()
     {
         Items.Add(new Item(1, "Common Land", "Land_Common", 0, 0, 0, 0, 0, 0, null, null));  // Tierra comun.
-        Items.Add(new Item(1, "Wooden Log", "Log_Wooden", 0, 0, 0, 0, 0, 0, null, null));  // Tronco de madera.
-        Items.Add(new Item(1, "Wood Plank", "Plank_Wood", 0, 0, 0, 0, 0, 0, new string[] { "Wooden Log" }, new int[] { 1 }));  // Tabla de madera.
-        Items.Add(new Item(1, "Wood Sticks", "Sticks_Wood", 0, 0, 0, 0, 0, 0, new string[] { "Wood Plank" }, new int[] { 1 }));  // Palito.
-        Items.Add(new Item(1, "Wooden Shovel", "Shovel_Wooden", 0, 0, 0, 5, 0, 0, new string[] { "Wood Plank", "Wood Sticks" }, new int[] { 3, 2 }));  // Pala de madera.
-        Items.Add(new Item(1, "Wooden Ax", "Ax_Wooden", 0, 0, 0, 0, 5, 0, new string[] { "Wood Plank", "Wood Sticks" }, new int[] { 2, 1 }));  // Hacha de madera.
-        Items.Add(new Item(1, "Wooden Pickaxe", "Pickaxe_Wooden", 0, 0, 0, 0, 0, 5, new string[] { "Wood Plank", "Wood Sticks" }, new int[] { 3, 4 }));  // Pico de madera.
+        Items.Add(new Item(2, "Wooden Log", "Log_Wooden", 0, 0, 0, 0, 0, 0, null, null));  // Tronco de madera.
+        Items.Add(new Item(3, "Wood Plank", "Plank_Wood", 0, 0, 0, 0, 0, 0, new string[] { "Wooden Log" }, new int[] { 1 }));  // Tabla de madera.
+        Items.Add(new Item(4, "Wood Sticks", "Sticks_Wood", 0, 0, 0, 0, 0, 0, new string[] { "Wood Plank" }, new int[] { 1 }));  // Palito.
+        Items.Add(new Item(5, "Wooden Shovel", "Shovel_Wooden", 0, 0, 0, 5, 0, 0, new string[] { "Wood Plank", "Wood Sticks" }, new int[] { 3, 2 }));  // Pala de madera.
+        Items.Add(new Item(6, "Wooden Ax", "Ax_Wooden", 0, 0, 0, 0, 5, 0, new string[] { "Wood Plank", "Wood Sticks" }, new int[] { 2, 1 }));  // Hacha de madera.
+        Items.Add(new Item(7, "Wooden Pickaxe", "Pickaxe_Wooden", 0, 0, 0, 0, 0, 5, new string[] { "Wood Plank", "Wood Sticks" }, new int[] { 3, 4 }));  // Pico de madera.
+        Items.Add(new Item(8, "Common Stone", "Stone_Wooden", 0, 0, 0, 0, 0, 0, null, null));  // Piedra comun.
+        Items.Add(new Item(5, "Stone Shovel", "Shovel_Stone", 0, 0, 0, 10, 0, 0, new string[] { "Common Stone", "Wood Sticks" }, new int[] { 2, 4 }));  // Pala de piedra.
+        Items.Add(new Item(6, "Stone Ax", "Ax_Stone", 0, 0, 0, 0, 10, 0, new string[] { "Common Stone", "Wood Sticks" }, new int[] { 2, 3 }));  // Hacha de piedra.
+        Items.Add(new Item(7, "Stone Pickaxe", "Pickaxe_Stone", 0, 0, 0, 0, 0, 10, new string[] { "Common Stone", "Wood Sticks" }, new int[] { 3, 6 }));  // Pico de piedra.
     }
 
     public static void addQuantitiesOfItems(string nameItem, int amountToStore)
@@ -55,8 +62,7 @@ public static class PlayerManager
 
     public static void storeItemInInventory(Item newItem, int amountToStore)
     {
-        addQuantitiesOfItems(newItem.name, amountToStore);
-
+        int howManyTosaved = amountToStore;
         int posItemFound = 1;
         int posArraySearch = 0;
 
@@ -64,10 +70,9 @@ public static class PlayerManager
         {
             posItemFound = PlayerManager.Inventory.FindIndex(posArraySearch, x => x.name.Equals(newItem.name));
             
-            if (posItemFound != -1 && PlayerManager.Inventory[posItemFound].quantity < 5)
+            if (posItemFound != -1 && PlayerManager.Inventory[posItemFound].quantity < PlayerManager.amountStorageSlot)
             {
-                Debug.Log("Entro aca por que lo encontre pero quantity es menor a 5");
-                int howManyCanISave = 5 - PlayerManager.Inventory[posItemFound].quantity;
+                int howManyCanISave = PlayerManager.amountStorageSlot - PlayerManager.Inventory[posItemFound].quantity;
                 
                 if (howManyCanISave >= amountToStore)
                 {
@@ -78,21 +83,17 @@ public static class PlayerManager
                     PlayerManager.Inventory[posItemFound].quantity += howManyCanISave;
                     amountToStore -= howManyCanISave;
                 }
-            } else
-            {
-                if (posItemFound != -1 && PlayerManager.Inventory[posItemFound].quantity == 5)
-                {
-                    Debug.Log("Entro aca por que lo encontre pero quantity es igual a 5");
-                    posArraySearch = posItemFound + 1;
-                }
-            }
+            } else if (posItemFound != -1 && PlayerManager.Inventory[posItemFound].quantity == PlayerManager.amountStorageSlot) posArraySearch = posItemFound + 1;
 
             if (posItemFound == -1)
             {
-                if (PlayerManager.Inventory.Count == 9) Debug.Log("No hay slot libre para almacenar este item: " + newItem.name);
+                if (PlayerManager.Inventory.Count == 8)
+                {
+                    Debug.Log("No hay slot libre para almacenar este item: " + newItem.name);
+                    break;
+                }
                 else
                 {
-                    Debug.Log("Entro aca porque no lo encontre y hay slots para crear o vacios");
                     amountToStore -= 1;
 
                     Item itemStore = PlayerManager.iThinkItem(newItem.id, newItem.name, newItem.type, 1, newItem.SpeedSwim, newItem.SpeedDisplacement,
@@ -105,6 +106,8 @@ public static class PlayerManager
                 }
             }
         }
+
+        if (PlayerManager.Inventory.Count < 8) addQuantitiesOfItems(newItem.name, howManyTosaved - amountToStore);
     }
 
     private static bool canICreateItem(Dictionary<string, int> necessaryMaterials)
@@ -115,8 +118,10 @@ public static class PlayerManager
         {
             foundResources = false;
             if (PlayerManager.itemsAndQuantities.TryGetValue(necessaryMaterial.Key, out int value))
+            {
                 if (value >= necessaryMaterial.Value) foundResources = true;
-                else break;
+            }                
+            else break;
         }
         return foundResources;
     }
@@ -168,7 +173,7 @@ public static class PlayerManager
 
         if (canICreateThisMeterial)
         {
-            stockControl(createWith);
+            if (PlayerManager.Inventory.Count < 8 || PlayerManager.Inventory.FindIndex(0, x => x.name.Equals("Empty")) != -1) stockControl(createWith);
 
             PlayerManager.storeItemInInventory(itemBuild, quantity);
         } else Debug.Log("No tiene los materiales suficientes para crear este item");

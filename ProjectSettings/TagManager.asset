@@ -11,6 +11,7 @@ TagManager:
   - BodyPlayerRight
   - BodyPlayerLeft
   - WoodenLog
+  - CStone
   layers:
   - Default
   - TransparentFX

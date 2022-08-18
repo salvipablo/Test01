@@ -111,7 +111,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 84d7d9760561bf8498cef8ca472c7241, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  life: 30
+  life: 100
 --- !u!114 &1265919870237358956
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -127,3 +127,8 @@ MonoBehaviour:
   id: 1
   name: Common Land
   type: Land_Common
+  SpeedSwim: 0
+  SpeedDisplacement: 0
+  SpeedShovel: 0
+  SpeedAxe: 0
+  SpeedPeak: 0
